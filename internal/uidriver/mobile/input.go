@@ -33,7 +33,7 @@ type Input struct {
 	runes    []rune
 	touches  map[int]pos
 	gamepads []Gamepad
-	sensors  [3]sensor.Event
+	sensors  []sensor.Event
 	ui       *UserInterface
 }
 
@@ -199,6 +199,28 @@ func (i *Input) GetSensorAccelerometer() (x, y, z float64) {
 	return 0.0, 0.0, 0.0
 }
 
+func (i *Input) GetSensorGyroscope() (x, y, z float64) {
+	i.ui.m.RLock()
+	defer i.ui.m.RUnlock()
+	for _, sensordata := range i.sensors {
+		if sensordata.Sensor == sensor.Gyroscope {
+			return sensordata.Data[0], sensordata.Data[1], sensordata.Data[2]
+		}
+	}
+	return 0.0, 0.0, 0.0
+}
+
+func (i *Input) GetSensorMagnetometer() (x, y, z float64) {
+	i.ui.m.RLock()
+	defer i.ui.m.RUnlock()
+	for _, sensordata := range i.sensors {
+		if sensordata.Sensor == sensor.Magnetometer {
+			return sensordata.Data[0], sensordata.Data[1], sensordata.Data[2]
+		}
+	}
+	return 0.0, 0.0, 0.0
+}
+
 func (i *Input) update(keys map[driver.Key]struct{}, runes []rune, touches []*Touch, gamepads []Gamepad, sensors []sensor.Event) {
 	i.ui.m.Lock()
 	defer i.ui.m.Unlock()
@@ -222,8 +244,8 @@ func (i *Input) update(keys map[driver.Key]struct{}, runes []rune, touches []*To
 	i.gamepads = make([]Gamepad, len(gamepads))
 	copy(i.gamepads, gamepads)
 
-	i.sensors = [3]sensor.Event{}
-	copy(i.sensors[:], sensors[:])
+	i.sensors = make([]sensor.Event, 3)
+	copy(i.sensors, sensors)
 }
 
 func (i *Input) resetForFrame() {

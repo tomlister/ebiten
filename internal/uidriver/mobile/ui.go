@@ -172,11 +172,15 @@ func (u *UserInterface) appMain(a app.App) {
 					glContextCh = nil
 				}
 				sensor.Enable(sensor.Accelerometer, 10*time.Millisecond)
+				sensor.Enable(sensor.Gyroscope, 10*time.Millisecond)
+				sensor.Enable(sensor.Magnetometer, 10*time.Millisecond)
 				a.Send(paint.Event{})
 			case lifecycle.CrossOff:
 				u.SetForeground(false)
 				glctx = nil
 				sensor.Disable(sensor.Accelerometer)
+				sensor.Disable(sensor.Gyroscope)
+				sensor.Disable(sensor.Magnetometer)
 			}
 		case size.Event:
 			u.setGBuildSize(e.WidthPx, e.HeightPx)
@@ -233,6 +237,10 @@ func (u *UserInterface) appMain(a app.App) {
 			switch e.Sensor {
 			case sensor.Accelerometer:
 				sensors[0] = e
+			case sensor.Gyroscope:
+				sensors[1] = e
+			case sensor.Magnetometer:
+				sensors[2] = e
 			}
 			updateInput = true
 		}
