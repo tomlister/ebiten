@@ -244,14 +244,14 @@ func Touches() []Touch {
 	return ts
 }
 
-func GetSensorAccelerometer() (x, y, z float64) {
-	return uiDriver().Input().GetSensorAccelerometer()
+func SensorAccelerometer() (x, y, z float64) {
+	return uiDriver().Input().SensorAccelerometer()
 }
 
-func GetSensorGyroscope() (x, y, z float64) {
-	return uiDriver().Input().GetSensorGyroscope()
+func SensorGyroscope() (x, y, z float64) {
+	return uiDriver().Input().SensorGyroscope()
 }
 
-func GetSensorMagnetometer() (x, y, z float64) {
-	return uiDriver().Input().GetSensorMagnetometer()
+func SensorMagnetometer() (x, y, z float64) {
+	return uiDriver().Input().SensorMagnetometer()
 }

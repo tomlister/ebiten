@@ -188,7 +188,7 @@ func (i *Input) IsMouseButtonPressed(key driver.MouseButton) bool {
 	return false
 }
 
-func (i *Input) GetSensorAccelerometer() (x, y, z float64) {
+func (i *Input) SensorAccelerometer() (x, y, z float64) {
 	i.ui.m.RLock()
 	defer i.ui.m.RUnlock()
 	for _, sensordata := range i.sensors {
@@ -199,7 +199,7 @@ func (i *Input) GetSensorAccelerometer() (x, y, z float64) {
 	return 0.0, 0.0, 0.0
 }
 
-func (i *Input) GetSensorGyroscope() (x, y, z float64) {
+func (i *Input) SensorGyroscope() (x, y, z float64) {
 	i.ui.m.RLock()
 	defer i.ui.m.RUnlock()
 	for _, sensordata := range i.sensors {
@@ -210,7 +210,7 @@ func (i *Input) GetSensorGyroscope() (x, y, z float64) {
 	return 0.0, 0.0, 0.0
 }
 
-func (i *Input) GetSensorMagnetometer() (x, y, z float64) {
+func (i *Input) SensorMagnetometer() (x, y, z float64) {
 	i.ui.m.RLock()
 	defer i.ui.m.RUnlock()
 	for _, sensordata := range i.sensors {
