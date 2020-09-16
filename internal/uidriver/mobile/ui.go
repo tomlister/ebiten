@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"runtime/debug"
 	"sync"
+	"time"
 	"unicode"
 
 	"golang.org/x/mobile/app"
@@ -29,6 +30,7 @@ import (
 	"golang.org/x/mobile/event/paint"
 	"golang.org/x/mobile/event/size"
 	"golang.org/x/mobile/event/touch"
+	"golang.org/x/mobile/exp/sensor"
 	"golang.org/x/mobile/gl"
 
 	"github.com/hajimehoshi/ebiten/internal/devicescale"
@@ -150,7 +152,8 @@ func (u *UserInterface) appMain(a app.App) {
 
 	touches := map[touch.Sequence]*Touch{}
 	keys := map[driver.Key]struct{}{}
-
+	sensors := make([]sensor.Event, 3)
+	sensor.Notify(a)
 	for e := range a.Events() {
 		var updateInput bool
 		var runes []rune
@@ -168,10 +171,12 @@ func (u *UserInterface) appMain(a app.App) {
 					glContextCh <- glctx
 					glContextCh = nil
 				}
+				sensor.Enable(sensor.Accelerometer, 10*time.Millisecond)
 				a.Send(paint.Event{})
 			case lifecycle.CrossOff:
 				u.SetForeground(false)
 				glctx = nil
+				sensor.Disable(sensor.Accelerometer)
 			}
 		case size.Event:
 			u.setGBuildSize(e.WidthPx, e.HeightPx)
@@ -224,6 +229,12 @@ func (u *UserInterface) appMain(a app.App) {
 				}
 			}
 			updateInput = true
+		case sensor.Event:
+			switch e.Sensor {
+			case sensor.Accelerometer:
+				sensors[0] = e
+			}
+			updateInput = true
 		}
 
 		if updateInput {
@@ -231,7 +242,7 @@ func (u *UserInterface) appMain(a app.App) {
 			for _, t := range touches {
 				ts = append(ts, t)
 			}
-			u.input.update(keys, runes, ts, nil)
+			u.input.update(keys, runes, ts, nil, sensors)
 		}
 	}
 }
@@ -470,5 +481,5 @@ type Gamepad struct {
 }
 
 func (u *UserInterface) UpdateInput(keys map[driver.Key]struct{}, runes []rune, touches []*Touch, gamepads []Gamepad) {
-	u.input.update(keys, runes, touches, gamepads)
+	u.input.update(keys, runes, touches, gamepads, nil)
 }

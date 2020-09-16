@@ -243,3 +243,7 @@ func Touches() []Touch {
 	}
 	return ts
 }
+
+func GetSensorAccelerometer() (x, y, z float64) {
+	return uiDriver().Input().GetSensorAccelerometer()
+}

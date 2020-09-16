@@ -29,4 +29,5 @@ type Input interface {
 	TouchIDs() []int
 	TouchPosition(id int) (x, y int)
 	Wheel() (xoff, yoff float64)
+	GetSensorAccelerometer() (x, y, z float64)
 }
