@@ -153,7 +153,7 @@ uniform highp vec2 source_size;
 uniform highp float scale;
 #endif
 
-varying highp vec2 varying_tex;
+varying highp vec3 varying_tex;
 varying highp vec4 varying_color_scale;
 
 highp float floorMod(highp float x, highp float y) {
@@ -180,7 +180,7 @@ highp vec2 adjustTexelByAddress(highp vec2 p, highp vec4 source_region) {
 }
 
 void main(void) {
-  highp vec2 pos = varying_tex;
+  highp vec2 pos = varying_tex.xy;
 
 #if defined(FILTER_NEAREST)
   vec4 color;
