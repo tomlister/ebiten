@@ -211,12 +211,14 @@ type Vertex struct {
 	// DstX and DstY represents a point on a destination image.
 	DstX float32
 	DstY float32
+	DstZ float32
 
 	// SrcX and SrcY represents a point on a source image.
 	// Be careful that SrcX/SrcY coordinates are on the image's bounds.
 	// This means that a left-upper point of a sub-image might not be (0, 0).
 	SrcX float32
 	SrcY float32
+	SrcZ float32
 
 	// ColorR/ColorG/ColorB/ColorA represents color scaling values.
 	// 1 means the original source image color is used.
@@ -327,12 +329,14 @@ func (i *Image) DrawTriangles(vertices []Vertex, indices []uint16, img *Image, o
 	for i, v := range vertices {
 		vs[i*graphics.VertexFloatNum] = v.DstX
 		vs[i*graphics.VertexFloatNum+1] = v.DstY
-		vs[i*graphics.VertexFloatNum+2] = v.SrcX
-		vs[i*graphics.VertexFloatNum+3] = v.SrcY
-		vs[i*graphics.VertexFloatNum+4] = v.ColorR
-		vs[i*graphics.VertexFloatNum+5] = v.ColorG
-		vs[i*graphics.VertexFloatNum+6] = v.ColorB
-		vs[i*graphics.VertexFloatNum+7] = v.ColorA
+		vs[i*graphics.VertexFloatNum+2] = v.DstZ
+		vs[i*graphics.VertexFloatNum+3] = v.SrcX
+		vs[i*graphics.VertexFloatNum+4] = v.SrcY
+		vs[i*graphics.VertexFloatNum+5] = v.SrcZ
+		vs[i*graphics.VertexFloatNum+6] = v.ColorR
+		vs[i*graphics.VertexFloatNum+7] = v.ColorG
+		vs[i*graphics.VertexFloatNum+8] = v.ColorB
+		vs[i*graphics.VertexFloatNum+9] = v.ColorA
 	}
 	is := make([]uint16, len(indices))
 	copy(is, indices)

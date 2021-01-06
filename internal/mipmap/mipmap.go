@@ -91,37 +91,6 @@ func (m *Mipmap) DrawTriangles(srcs [graphics.ShaderImageNum]*Mipmap, vertices [
 	}
 
 	level := 0
-	// TODO: Do we need to check all the sources' states of being volatile?
-	if !canSkipMipmap && srcs[0] != nil && !srcs[0].volatile && filter != driver.FilterScreen {
-		level = math.MaxInt32
-		for i := 0; i < len(indices)/3; i++ {
-			const n = graphics.VertexFloatNum
-			dx0 := vertices[n*indices[3*i]+0]
-			dy0 := vertices[n*indices[3*i]+1]
-			sx0 := vertices[n*indices[3*i]+2]
-			sy0 := vertices[n*indices[3*i]+3]
-			dx1 := vertices[n*indices[3*i+1]+0]
-			dy1 := vertices[n*indices[3*i+1]+1]
-			sx1 := vertices[n*indices[3*i+1]+2]
-			sy1 := vertices[n*indices[3*i+1]+3]
-			dx2 := vertices[n*indices[3*i+2]+0]
-			dy2 := vertices[n*indices[3*i+2]+1]
-			sx2 := vertices[n*indices[3*i+2]+2]
-			sy2 := vertices[n*indices[3*i+2]+3]
-			if l := mipmapLevelFromDistance(dx0, dy0, dx1, dy1, sx0, sy0, sx1, sy1, filter); level > l {
-				level = l
-			}
-			if l := mipmapLevelFromDistance(dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, filter); level > l {
-				level = l
-			}
-			if l := mipmapLevelFromDistance(dx2, dy2, dx0, dy0, sx2, sy2, sx0, sy0, filter); level > l {
-				level = l
-			}
-		}
-		if level == math.MaxInt32 {
-			panic("mipmap: level must be calculated at least once but not")
-		}
-	}
 
 	if colorm != nil && colorm.ScaleOnly() {
 		body, _ := colorm.UnsafeElements()
@@ -132,10 +101,10 @@ func (m *Mipmap) DrawTriangles(srcs [graphics.ShaderImageNum]*Mipmap, vertices [
 		colorm = nil
 		const n = graphics.VertexFloatNum
 		for i := 0; i < len(vertices)/n; i++ {
-			vertices[i*n+4] *= cr
-			vertices[i*n+5] *= cg
-			vertices[i*n+6] *= cb
-			vertices[i*n+7] *= ca
+			vertices[i*n+6] *= cr
+			vertices[i*n+7] *= cg
+			vertices[i*n+8] *= cb
+			vertices[i*n+9] *= ca
 		}
 	}
 
@@ -154,8 +123,8 @@ func (m *Mipmap) DrawTriangles(srcs [graphics.ShaderImageNum]*Mipmap, vertices [
 				const n = graphics.VertexFloatNum
 				s := float32(pow2(level))
 				for i := 0; i < len(vertices)/n; i++ {
-					vertices[i*n+2] /= s
 					vertices[i*n+3] /= s
+					vertices[i*n+4] /= s
 				}
 				imgs[i] = img
 				continue
@@ -260,7 +229,7 @@ func (m *Mipmap) disposeMipmaps() {
 }
 
 // mipmapLevel returns an appropriate mipmap level for the given distance.
-func mipmapLevelFromDistance(dx0, dy0, dx1, dy1, sx0, sy0, sx1, sy1 float32, filter driver.Filter) int {
+func mipmapLevelFromDistance(dx0, dy0, dz0, dx1, dy1, dz1, sx0, sy0, sz0, sx1, sy1, sz1 float32, filter driver.Filter) int {
 	const maxLevel = 6
 
 	if filter == driver.FilterScreen {

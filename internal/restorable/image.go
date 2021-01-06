@@ -336,8 +336,10 @@ func (i *Image) ReplacePixels(pixels []byte, x, y, width, height int) {
 //
 //   0: Destination X in pixels
 //   1: Destination Y in pixels
+//   2: Destination Z in pixels
 //   2: Source X in pixels (not texels!)
 //   3: Source Y in pixels
+//   4: Source Z in pixels
 //   4: Color R [0.0-1.0]
 //   5: Color G
 //   6: Color B
@@ -383,6 +385,8 @@ func (i *Image) DrawTriangles(srcs [graphics.ShaderImageNum]*Image, offsets [gra
 		}
 		s = shader.shader
 	}
+	fmt.Println(vertices)
+	fmt.Println(indices)
 	i.image.DrawTriangles(imgs, offsets, vertices, indices, colorm, mode, filter, address, dstRegion, srcRegion, s, uniforms)
 }
 

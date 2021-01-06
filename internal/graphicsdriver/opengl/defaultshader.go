@@ -109,10 +109,10 @@ func fragmentShaderStr(useColorM bool, filter driver.Filter, address driver.Addr
 const (
 	shaderStrVertex = `
 uniform vec2 viewport_size;
-attribute vec2 A0;
-attribute vec2 A1;
+attribute vec3 A0;
+attribute vec3 A1;
 attribute vec4 A2;
-varying vec2 varying_tex;
+varying vec3 varying_tex;
 varying vec4 varying_color_scale;
 
 void main(void) {
@@ -125,7 +125,7 @@ void main(void) {
     vec4(0, 0, 1, 0),
     vec4(-1, -1, 0, 1)
   );
-  gl_Position = projection_matrix * vec4(A0, 0, 1);
+  gl_Position = projection_matrix * vec4(A0, 1);
 }
 `
 	shaderStrFragment = `

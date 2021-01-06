@@ -375,8 +375,8 @@ func (i *Image) DrawTriangles(srcs [graphics.ShaderImageNum]*Image, vertices []f
 		for i := 0; i < n; i++ {
 			vertices[i*graphics.VertexFloatNum+0] += dx
 			vertices[i*graphics.VertexFloatNum+1] += dy
-			vertices[i*graphics.VertexFloatNum+2] += oxf
-			vertices[i*graphics.VertexFloatNum+3] += oyf
+			vertices[i*graphics.VertexFloatNum+3] += oxf
+			vertices[i*graphics.VertexFloatNum+4] += oyf
 		}
 		// srcRegion can be delibarately empty when this is not needed in order to avoid unexpected
 		// performance issue (#1293).

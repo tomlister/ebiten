@@ -94,11 +94,11 @@ var theArrayBufferLayout = arrayBufferLayout{
 	parts: []arrayBufferLayoutPart{
 		{
 			name: "A0",
-			num:  2,
+			num:  3,
 		},
 		{
 			name: "A1",
-			num:  2,
+			num:  3,
 		},
 		{
 			name: "A2",

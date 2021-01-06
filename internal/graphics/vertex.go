@@ -42,7 +42,7 @@ const (
 
 const (
 	IndicesNum     = (1 << 16) / 3 * 3 // Adjust num for triangles.
-	VertexFloatNum = 8
+	VertexFloatNum = 10
 )
 
 var (
